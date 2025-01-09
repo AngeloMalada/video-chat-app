@@ -10,6 +10,7 @@ import { Loader, MeetingModal, HomeCard } from '@components';
 import ReactDatePicker from 'react-datepicker';
 import { Input, useToast, Textarea } from '@shadcn';
 import { env } from '@/lib';
+import { v4 as uuidv4 } from 'uuid';
 
 const initialValues = {
   dateTime: new Date(),
@@ -35,7 +36,7 @@ function MeetingTypeList() {
         toast({ title: 'Please select a date and time' });
         return;
       }
-      const id = crypto.randomUUID();
+      const id = uuidv4();
       const call = client.call('default', id);
       if (!call) throw new Error('Failed to create meeting');
       const startsAt =

@@ -21,7 +21,7 @@ function StreamVideoProvider({ children }: Readonly<{ children: ReactNode }>) {
       apiKey: API_KEY,
       user: {
         id: user?.id,
-        name: user?.username || user?.id,
+        name: user?.username ?? user?.id,
         image: user?.imageUrl,
       },
       tokenProvider,
