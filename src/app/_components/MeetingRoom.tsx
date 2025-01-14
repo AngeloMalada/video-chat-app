@@ -98,7 +98,10 @@ const MeetingRoom = () => {
       <div className="relative flex size-full items-center justify-center">
         <div className="flex size-full items-center">
           {/* <CallLayout /> */}
-          <CallLayout />
+          <StreamTheme className="relative">
+            <MyParticipantList participants={remoteParticipants} />
+            <MyFloatingLocalParticipant participant={localParticipant} />
+          </StreamTheme>
         </div>
         <div
           className={cn('ml-2 hidden h-[calc(100vh-86px)]', {
