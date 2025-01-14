@@ -78,6 +78,13 @@
 .str-video__participant-details {
   color: white;
 }
+.str-video__participant-view {
+  max-width: none;
+}
+
+.str-video {
+  height: 100%;
+}
 
 .str-video__menu-container {
   color: white;

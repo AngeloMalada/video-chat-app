@@ -6,7 +6,10 @@ import {
   CallStatsButton,
   CallingState,
   PaginatedGridLayout,
+  ParticipantView,
   SpeakerLayout,
+  StreamTheme,
+  StreamVideoParticipant,
   useCallStateHooks,
 } from '@stream-io/video-react-sdk';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -30,10 +33,13 @@ const MeetingRoom = () => {
   const router = useRouter();
   const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
   const [showParticipants, setShowParticipants] = useState(false);
-  const { useCallCallingState } = useCallStateHooks();
+  const { useCallCallingState, useLocalParticipant, useRemoteParticipants } =
+    useCallStateHooks();
 
   // for more detail about types of CallingState see: https://getstream.io/video/docs/react/ui-cookbook/ringing-call/#incoming-call-panel
   const callingState = useCallCallingState();
+  const localParticipant = useLocalParticipant();
+  const remoteParticipants = useRemoteParticipants();
 
   if (callingState !== CallingState.JOINED) return <Loader />;
 
@@ -44,26 +50,19 @@ const MeetingRoom = () => {
       case 'speaker-right':
         return <SpeakerLayout participantsBarPosition="left" />;
       default:
-        return <SpeakerLayout participantsBarPosition="right" />;
+        return (
+          <StreamTheme className="relative">
+            <MyParticipantList participants={remoteParticipants} />
+            <MyFloatingLocalParticipant participant={localParticipant} />
+          </StreamTheme>
+        );
     }
   };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden pt-4 text-white">
-      <div className="relative flex size-full items-center justify-center">
-        <div className="flex size-full max-w-[1000px] items-center">
-          <CallLayout />
-        </div>
-        <div
-          className={cn('ml-2 hidden h-[calc(100vh-86px)]', {
-            'show-block': showParticipants,
-          })}
-        >
-          <CallParticipantsList onClose={() => setShowParticipants(false)} />
-        </div>
-      </div>
+    <section className="relative h-screen w-full overflow-hidden text-white">
       {/* video layout and call controls */}
-      <div className="fixed bottom-0 flex w-full flex-col items-center justify-center gap-2 pb-12 md:flex-row md:gap-5">
+      <div className="fixed top-0 z-50 flex w-full flex-col items-center justify-center gap-2 bg-[#252525] md:flex-row md:gap-5">
         <CallControls onLeave={() => router.push(`/`)} />
         <div className="flex gap-5">
           <DropdownMenu>
@@ -96,8 +95,54 @@ const MeetingRoom = () => {
         </div>
         {!isPersonalRoom && <EndCallButton />}
       </div>
+      <div className="relative flex size-full items-center justify-center">
+        <div className="flex size-full items-center">
+          {/* <CallLayout /> */}
+          <CallLayout />
+        </div>
+        <div
+          className={cn('ml-2 hidden h-[calc(100vh-86px)]', {
+            'show-block': showParticipants,
+          })}
+        >
+          <CallParticipantsList onClose={() => setShowParticipants(false)} />
+        </div>
+      </div>
     </section>
   );
 };
 
 export default MeetingRoom;
+
+export const MyParticipantList = (props: {
+  participants: StreamVideoParticipant[];
+}) => {
+  const { participants } = props;
+  return (
+    <div className="flex h-full w-[100vw] flex-row gap-2">
+      {participants.map((participant) => (
+        <div
+          className="aspect-video w-full rounded-b-lg"
+          key={participant.userId}
+        >
+          <ParticipantView
+            muteAudio
+            participant={participant}
+            key={participant.sessionId}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export const MyFloatingLocalParticipant = (props: {
+  participant?: StreamVideoParticipant;
+}) => {
+  const { participant } = props;
+  return (
+    <div className="absolute left-12 top-24 aspect-video w-64 rounded-lg shadow-lg">
+      {participant && <ParticipantView muteAudio participant={participant} />}
+    </div>
+  );
+};
