@@ -107,7 +107,7 @@ const MeetingRoom = () => {
           )}
         </div>
         <div
-          className={cn('ml-2 hidden h-[calc(100vh-86px)]', {
+          className={cn('hidden h-[calc(100vh-86px)]', {
             'show-block': showParticipants,
           })}
         >

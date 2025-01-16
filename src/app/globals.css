@@ -100,10 +100,10 @@
   border-radius: 10px;
   color: white;
   height: 100%;
-}
-
-.str-video__call-controls__button {
-  height: 40px;
+  position: absolute;
+  right: 0;
+  margin-top: 20px;
+  z-index: 20;
 }
 
 .glassmorphism {
