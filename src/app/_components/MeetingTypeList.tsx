@@ -127,7 +127,7 @@ function MeetingTypeList() {
               timeIntervals={15}
               timeCaption="time"
               dateFormat="MMMM d, yyyy h:mm aa"
-              className="w-full rounded bg-background p-2 focus:outline-none"
+              className="w-full rounded bg-background p-2 focus:outline-hidden"
             />
           </div>
         </MeetingModal>

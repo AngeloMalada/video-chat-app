@@ -1,11 +1,129 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-dark-1: #151515;
+  --color-dark-2: #151515;
+  --color-dark-3: #252a41;
+  --color-dark-4: #1e2757;
+
+  --color-blue-1: #0e78f9;
+
+  --color-sky-1: #c9ddff;
+  --color-sky-2: #ecf0ff;
+  --color-sky-3: #f5fcff;
+
+  --color-orange-1: #ff742e;
+
+  --color-purple-1: #830ef9;
+
+  --color-yellow-1: #f9a90e;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  --background-image-hero: url('/images/bg.jpg');
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+
+@utility flex-between {
+  @apply flex items-center justify-between;
+}
+
+@layer utilities {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 }
 
 @layer base {
@@ -65,93 +183,85 @@
   }
 }
 
-/* ======== stream css overrides ======== */
-.str-video__call-stats {
-  max-width: 500px;
-  position: relative;
-}
-
-.str-video__speaker-layout__wrapper {
-  max-height: 700px;
-}
-
-.str-video__participant-details {
-  color: white;
-}
-.str-video__participant-view {
-  max-width: none;
-}
-
-.str-video {
-  height: 100%;
-}
-
-.str-video__menu-container {
-  color: white;
-}
-
-.str-video__notification {
-  color: white;
-}
-
-.str-video__participant-list {
-  background-color: #1c1f2e;
-  padding: 10px;
-  border-radius: 10px;
-  color: white;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  margin-top: 20px;
-  z-index: 20;
-}
-
-.glassmorphism {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-.glassmorphism2 {
-  background: rgba(18, 17, 17, 0.25);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-/* ==== clerk class override ===== */
-
-.cl-userButtonPopoverActionButtonIcon {
-  color: white;
-}
-
-.cl-logoBox {
-  height: 40px;
-}
-.cl-dividerLine {
-  background: #252a41;
-  height: 2px;
-}
-
-.cl-socialButtonsIconButton {
-  border: 3px solid #565761;
-}
-
-.cl-internal-wkkub3 {
-  color: white;
-}
-.cl-userButtonPopoverActionButton {
-  color: white;
-}
-
-/* =============================== */
-
 @layer utilities {
-  .flex-center {
-    @apply flex items-center justify-center;
+  /* ======== stream css overrides ======== */
+  .str-video__call-stats {
+    max-width: 500px;
+    position: relative;
   }
 
-  .flex-between {
-    @apply flex items-center justify-between;
+  .str-video__speaker-layout__wrapper {
+    max-height: 700px;
   }
+
+  .str-video__participant-details {
+    color: white;
+  }
+  .str-video__participant-view {
+    max-width: none;
+  }
+
+  .str-video {
+    height: 100%;
+  }
+
+  .str-video__menu-container {
+    color: white;
+  }
+
+  .str-video__notification {
+    color: white;
+  }
+
+  .str-video__participant-list {
+    background-color: #1c1f2e;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    margin-top: 20px;
+    z-index: 20;
+  }
+
+  .glassmorphism {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .glassmorphism2 {
+    background: rgba(18, 17, 17, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* ==== clerk class override ===== */
+
+  .cl-userButtonPopoverActionButtonIcon {
+    color: white;
+  }
+
+  .cl-logoBox {
+    height: 40px;
+  }
+  .cl-dividerLine {
+    background: #252a41;
+    height: 2px;
+  }
+
+  .cl-socialButtonsIconButton {
+    border: 3px solid #565761;
+  }
+
+  .cl-internal-wkkub3 {
+    color: white;
+  }
+  .cl-userButtonPopoverActionButton {
+    color: white;
+  }
+
+  /* =============================== */
 }
 
 /* animation */
